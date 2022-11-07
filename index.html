@@ -7,12 +7,29 @@
     <title>ChartJs</title>
   </head>
   <body>
+    <input type="text" id="month" placeholder="month" />
+    <input type="text" id="performance" placeholder="performance" />
+    <input type="text" id="attendance" placeholder="attendance" />
+    <button id="btn">Add new Data</button>
+    <button id="remove">Remove Last</button>
     <canvas id="chart"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script type="text/javascript">
-      var ctx;
+      var ctx,chart
       window.addEventListener("load", function () {
         ctx = document.getElementById("chart");
+        var btn = document.getElementById("btn");
+        btn.addEventListener("click", ()=>{
+            var month = document.getElementById("month").value;
+            var performance = document.getElementById("performance").value;
+            var attendance = document.getElementById("attendance").value;
+            let payload = {month, performance,attendance};
+            addData(chart,payload);
+        });
+
+        var remove = document.getElementById("remove");
+        remove.addEventListener("click",()=>removeData(chart));
+
         chart = new Chart(ctx, {
           type: "bar",
           data: {
@@ -31,43 +48,75 @@
               {
                 label: "Attendance",
                 data: [100, 45, 60, 80, 67, 70, 80, 67, 70],
-                backgroundColor:[
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                ]
+                backgroundColor: [
+                  createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                ],
               },
               {
                 label: "Performance",
                 data: [80, 50, 23, 80, 67, 80, 90, 44, 66],
-                backgroundColor:[
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                    createColor(255),
-                ]
+                backgroundColor: [
+                  createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                  //   createColor(255),
+                ],
               },
             ],
+            borderWidht: 1,
+          },
+          options: {
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true,
+                  },
+                },
+              ],
+            },
           },
         });
+        
+        function addData(chart,{month,performance,attendance}){
+            
+            chart.data.labels.push(month);
+            chart.data.datasets[0].data.push(attendance);
+            chart.data.datasets[1].data.push(performance);
+            chart.update();
+
+        }
+
+        function removeData(chart){
+
+            chart.data.labels.pop();
+            chart.data.datasets.forEach((dataset)=>{
+                dataset.data.pop();
+            })
+            chart.update();
+
+        }
+
+        function random(num) {
+          return Math.floor(Math.random() * num);
+        }
+        function createColor(num) {
+          return `rgba(${random(num)},${random(num)},${random(num)})`;
+        }
       });
-      function random(num) {
-        return Math.floor(Math.random() * num);
-      }
-      function createColor(num){
-        return `rgba(${random(num)},${random(num)},${random(num)})`
-      }
     </script>
   </body>
 </html>
